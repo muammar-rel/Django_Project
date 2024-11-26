@@ -18,11 +18,11 @@ class CreateUserForm(UserCreationForm):
     fields = ['username', 'email', 'password1', 'password2']
     
 class ProfileForm(forms.ModelForm):
-    email = forms.EmailField(initial='')  # Menambahkan field email secara manual
-    
+    email = forms.EmailField(required=True)  # Menambahkan email field di form
+
     class Meta:
         model = Profile
-        fields = ['first_name', 'last_name', 'organization_name', 'address', 'phone_number', 'birthday', 'profile_picture']
+        fields = ['profile_picture', 'organization_name', 'address', 'phone_number', 'birthday', 'email']  # Menambahkan email ke fields
 
     def save(self, commit=True):
         # Mengupdate email pada user yang terkait

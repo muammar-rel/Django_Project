@@ -1,1 +1,221 @@
-register
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Raleway:wght@700&display=swap"
+    />
+    <title>Register</title>
+    <style>
+      /* General Styling */
+      body {
+        font-family: "Inter", sans-serif;
+        background: linear-gradient(
+          135deg,
+          #ff7f50,
+          #ff4500
+        ); /* Warna oranye */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        overflow: hidden;
+        color: #fff;
+      }
+
+      /* Bubble Background */
+      .bubble {
+        position: absolute;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 50%;
+        filter: blur(10px);
+        animation: float 6s infinite ease-in-out;
+      }
+
+      .bubble:nth-child(1) {
+        width: 80px;
+        height: 80px;
+        top: 10%;
+        left: 15%;
+      }
+
+      .bubble:nth-child(2) {
+        width: 120px;
+        height: 120px;
+        top: 30%;
+        left: 70%;
+      }
+
+      .bubble:nth-child(3) {
+        width: 150px;
+        height: 150px;
+        top: 50%;
+        left: 40%;
+      }
+
+      .bubble:nth-child(4) {
+        width: 100px;
+        height: 100px;
+        top: 80%;
+        left: 20%;
+      }
+
+      @keyframes float {
+        0% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-20px);
+        }
+        100% {
+          transform: translateY(0);
+        }
+      }
+
+      /* Register Form Container */
+      .register-container {
+        background: #ffffff; /* Latar putih untuk kontras */
+        padding: 30px 40px;
+        border-radius: 20px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        width: 100%;
+        max-width: 400px;
+        text-align: center;
+        animation: slide-in 0.7s ease-out;
+        color: #333; /* Warna teks lebih gelap */
+      }
+
+      .register-container h2 {
+        font-family: "Raleway", sans-serif;
+        font-size: 2.5rem;
+        margin-bottom: 20px;
+        color: #ff7f50; /* Warna oranye */
+      }
+
+      .register-container label {
+        font-size: 1rem;
+        color: #555;
+        margin-bottom: 5px;
+        display: block;
+        text-align: left;
+        font-weight: 600;
+      }
+
+      .register-container input {
+        width: 100%;
+        padding: 12px;
+        margin: 10px 0 20px 0;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        font-size: 1rem;
+        background: #f9f9f9;
+        color: #333;
+        outline: none;
+        transition: transform 0.3s ease, background 0.3s ease, border 0.3s ease;
+      }
+
+      .register-container input:focus {
+        background: #ffffff;
+        border: 1px solid #ff7f50;
+        transform: translateY(-2px);
+      }
+
+      .register-container button {
+        width: 100%;
+        padding: 12px;
+        background: linear-gradient(135deg, #ff7f50, #ff4500);
+        color: #ffffff;
+        border: none;
+        border-radius: 50px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .register-container button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(255, 69, 0, 0.4);
+      }
+
+      .register-container a {
+        color: #ff7f50;
+        text-decoration: none;
+        font-size: 0.9rem;
+        font-weight: 600;
+      }
+
+      .register-container a:hover {
+        text-decoration: underline;
+      }
+
+      .register-container p {
+        font-size: 0.9rem;
+        color: #555;
+      }
+
+      .message {
+        margin-top: 10px;
+        color: #ff7f50;
+        font-size: 0.9rem;
+        font-weight: 500;
+      }
+
+      /* Animations */
+      @keyframes slide-in {
+        from {
+          transform: translateY(-30px);
+          opacity: 0;
+        }
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Bubble Background -->
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+
+    <div class="register-container">
+      <h2>REGISTER</h2>
+      <form method="post">
+        {% csrf_token %}
+        <label for="username">Nama Pengguna</label>
+        <input
+          type="text"
+          id="username"
+          name="username"
+          placeholder="Masukkan nama pengguna"
+          required
+        />
+        <label for="email">Email</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          placeholder="Masukkan email Anda"
+          required
+        />
+        <label for="password">Kata Sandi</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          placeholder="Masukkan kata sandi"
+          required
+        />
+        <button type="submit">Daftar</button>
+      </form>
+      <p>Sudah punya akun? <a href="{% url 'login' %}">Masuk disini</a></p>
+      {% for message in messages %}
+      <p class="message">{{ message }}</p>
+      {% endfor %}
+    </div>
+  </body>
+</html>

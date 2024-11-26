@@ -52,6 +52,12 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
+
+
+CSRF_COOKIE_SECURE = True  # Harus disetel ke True jika menggunakan HTTPS
+CSRF_COOKIE_HTTPONLY = False  # Harus disetel ke False
+CSRF_COOKIE_NAME = 'csrftoken'  # Nama cookie CSRF
+
 ROOT_URLCONF = "ecommerce.urls"
 
 TEMPLATES = [

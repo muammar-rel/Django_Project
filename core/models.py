@@ -1,18 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    profile_picture = models.ImageField(upload_to='images/profile_pics/', default='images/default.png')
-    first_name = models.CharField(max_length=100)
-    last_name = models.CharField(max_length=100)
-    organization_name = models.CharField(max_length=255, blank=True)
-    address = models.TextField(blank=True)
-    phone_number = models.CharField(max_length=15, blank=True)
-    birthday = models.DateField(null=True, blank=True)
 
-    def __str__(self):
-        return f"{self.user.username}'s Profile"
 
 class Customer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -97,3 +86,14 @@ class ShippingAddress(models.Model):
 
     def __str__(self):
         return f'{self.address}, {self.city}, {self.state}, {self.zipcode}'
+    
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    profile_picture = models.ImageField(upload_to='static/images/profile_pics/', blank=True, null=True)
+    organization_name = models.CharField(max_length=255, blank=True, null=True)
+    address = models.TextField(blank=True, null=True)
+    phone_number = models.CharField(max_length=15, blank=True, null=True)
+    birthday = models.DateField(blank=True, null=True)
+
+    def __str__(self):
+        return self.user.username

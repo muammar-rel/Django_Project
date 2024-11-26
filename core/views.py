@@ -8,10 +8,27 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from core.forms import ProfileForm
+from .forms import ProfileForm
 
 
 
+def profilePage(request):
+    if not hasattr(request.user, 'profile'):
+        Profile.objects.create(user=request.user)  # Membuat profil baru untuk user yang tidak memiliki profil
+
+    if request.method == "POST" and request.FILES:
+        form = ProfileForm(request.POST, request.FILES, instance=request.user.profile)
+        if form.is_valid():
+            # Menyimpan data ke dalam profil
+            form.save()
+
+            # Menampilkan pesan sukses
+            messages.success(request, "Profile updated successfully!")
+            return redirect('profile')  # Ganti dengan nama URL yang sesuai
+    else:
+        form = ProfileForm(instance=request.user.profile)
+
+    return render(request, 'core/profile.html', {'form': form})
 
 def loginPage(request):
     if request.method == 'POST':
@@ -44,23 +61,7 @@ def registerPage(request):
             return redirect('store')
     return render(request, 'core/register.html')
   
-#@login_required
-def profilePage(request):
-    if request.method == "POST" and request.FILES:
-        form = ProfileForm(request.POST, request.FILES)
-        if form.is_valid():
-            # Menyimpan file gambar ke model
-            user_profile = form.save(commit=False)
-            user_profile.user = request.user  # Menghubungkan dengan pengguna yang sedang login
-            user_profile.save()
 
-            # Menampilkan pesan sukses
-            messages.success(request, "Profile updated successfully!")
-            return redirect('profile')  # Ganti dengan URL profil pengguna
-    else:
-        form = ProfileForm(instance=request.user.profile)
-
-    return render(request, 'core/profile.html', {'form': form})
 
 def store(request):
     if request.user.is_authenticated:
