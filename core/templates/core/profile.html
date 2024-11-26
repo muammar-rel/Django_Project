@@ -1,0 +1,267 @@
+{% extends "core/main.html" %} {% load static %} {% block content %}
+<div class="container-xl px-4 mt-4">
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+    crossorigin="anonymous"
+  />
+  <link
+    rel="stylesheet"
+    type="text/css"
+    href="{% static 'css/profile.css' %}"
+  />
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"
+  />
+
+  <!-- Account page navigation -->
+  <nav class="nav nav-borders">
+    <a class="nav-link active ms-0" href="#">Profile</a>
+    <a class="nav-link" href="#">Billing</a>
+    <a class="nav-link" href="#">Security</a>
+    <a class="nav-link" href="#">Notifications</a>
+  </nav>
+  <hr class="mt-0 mb-4" />
+  <div class="row">
+    <div class="col-xl-4">
+      <!-- Profile picture card -->
+      <div class="card mb-4 mb-xl-0">
+        <div class="card-header">Profile Picture</div>
+        <div class="card-body text-center">
+          <!-- Gambar Profil yang Dapat Diklik -->
+          <img
+            class="img-account-profile rounded-circle mb-2"
+            src="{% if user.profile.profile_picture %}{% static 'images/profile_pics/' %}{{ user.profile.profile_picture.name }}{% else %}{% static 'images/default.png' %}{% endif %}"
+            alt="Profile Picture"
+            id="profilePicturePreview"
+            onclick="document.getElementById('fileInput').click();"
+            style="cursor: pointer"
+          />
+
+          <!-- Hidden file input untuk mengunggah gambar -->
+          <input
+            type="file"
+            id="fileInput"
+            name="profile_picture"
+            accept="image/*"
+            style="display: none"
+            onchange="previewImage(event)"
+          />
+          <label for="fileInput" class="btn btn-primary"
+            >Change Profile Picture</label
+          >
+        </div>
+      </div>
+    </div>
+
+    <!-- Account details card -->
+    <div class="col-xl-8">
+      <div class="card mb-4">
+        <div class="card-header">Account Details</div>
+        <div class="card-body">
+          <!-- Form gabungan untuk semua perubahan -->
+          <form
+            id="profileForm"
+            method="POST"
+            action=""
+            enctype="multipart/form-data"
+          >
+            {% csrf_token %}
+
+            <!-- Input untuk Username -->
+            <div class="mb-3">
+              <label class="small mb-1" for="inputUsername">Username</label>
+              <input
+                class="form-control {% if form.username.errors %}is-invalid{% endif %}"
+                id="inputUsername"
+                name="username"
+                type="text"
+                value="{{ user.username }}"
+              />
+              {% for error in form.username.errors %}
+              <div class="invalid-feedback">{{ error }}</div>
+              {% endfor %}
+            </div>
+
+            <!-- Input untuk First Name dan Last Name -->
+            <div class="row gx-3 mb-3">
+              <div class="col-md-6">
+                <label class="small mb-1" for="inputFirstName"
+                  >First name</label
+                >
+                <input
+                  class="form-control {% if form.first_name.errors %}is-invalid{% endif %}"
+                  id="inputFirstName"
+                  name="first_name"
+                  type="text"
+                  value="{{ form.first_name.value|default:user.first_name }}"
+                />
+                {% for error in form.first_name.errors %}
+                <div class="invalid-feedback">{{ error }}</div>
+                {% endfor %}
+              </div>
+              <div class="col-md-6">
+                <label class="small mb-1" for="inputLastName">Last name</label>
+                <input
+                  class="form-control {% if form.last_name.errors %}is-invalid{% endif %}"
+                  id="inputLastName"
+                  name="last_name"
+                  type="text"
+                  value="{{ form.last_name.value|default:user.last_name }}"
+                />
+                {% for error in form.last_name.errors %}
+                <div class="invalid-feedback">{{ error }}</div>
+                {% endfor %}
+              </div>
+            </div>
+
+            <!-- Input untuk Organization Name dan Address -->
+            <div class="row gx-3 mb-3">
+              <div class="col-md-6">
+                <label class="small mb-1" for="inputOrgName"
+                  >Organization name</label
+                >
+                <input
+                  class="form-control {% if form.organization_name.errors %}is-invalid{% endif %}"
+                  id="inputOrgName"
+                  name="organization_name"
+                  type="text"
+                  value="{{ form.organization_name.value|default:user.profile.organization_name }}"
+                />
+                {% for error in form.organization_name.errors %}
+                <div class="invalid-feedback">{{ error }}</div>
+                {% endfor %}
+              </div>
+              <div class="col-md-6">
+                <label class="small mb-1" for="inputLocation">Address</label>
+                <input
+                  class="form-control {% if form.address.errors %}is-invalid{% endif %}"
+                  id="inputLocation"
+                  name="address"
+                  type="text"
+                  value="{{ form.address.value|default:user.profile.address }}"
+                />
+                {% for error in form.address.errors %}
+                <div class="invalid-feedback">{{ error }}</div>
+                {% endfor %}
+              </div>
+            </div>
+
+            <!-- Input untuk Email, Phone Number, Birthday -->
+            <div class="mb-3">
+              <label class="small mb-1" for="inputEmailAddress"
+                >Email address</label
+              >
+              <input
+                class="form-control {% if form.email.errors %}is-invalid{% endif %}"
+                id="inputEmailAddress"
+                name="email"
+                type="email"
+                value="{{ form.email.value|default:user.email }}"
+              />
+              {% for error in form.email.errors %}
+              <div class="invalid-feedback">{{ error }}</div>
+              {% endfor %}
+            </div>
+
+            <div class="row gx-3 mb-3">
+              <div class="col-md-6">
+                <label class="small mb-1" for="inputPhone">Phone number</label>
+                <input
+                  class="form-control {% if form.phone_number.errors %}is-invalid{% endif %}"
+                  id="inputPhone"
+                  name="phone_number"
+                  type="tel"
+                  value="{{ form.phone_number.value|default:user.profile.phone_number }}"
+                />
+                {% for error in form.phone_number.errors %}
+                <div class="invalid-feedback">{{ error }}</div>
+                {% endfor %}
+              </div>
+              <div class="col-md-6">
+                <label class="small mb-1" for="inputBirthday">Birthday</label>
+                <input
+                  class="form-control {% if form.birthday.errors %}is-invalid{% endif %}"
+                  id="inputBirthday"
+                  name="birthday"
+                  type="text"
+                  value="{{ form.birthday.value|default:user.profile.birthday|date:'Y-m-d' }}"
+                />
+                {% for error in form.birthday.errors %}
+                <div class="invalid-feedback">{{ error }}</div>
+                {% endfor %}
+              </div>
+            </div>
+
+            <!-- Tombol untuk save perubahan -->
+            <button class="btn btn-primary" type="submit">Save changes</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% if messages %}
+<div
+  id="successToast"
+  class="toast align-items-center text-white bg-success border-0"
+  role="alert"
+  aria-live="assertive"
+  aria-atomic="true"
+  style="
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1050;
+    display: block;
+  "
+>
+  <div class="d-flex">
+    <div class="toast-body">
+      {% for message in messages %} {{ message }} {% endfor %}
+    </div>
+    <button
+      type="button"
+      class="btn-close btn-close-white me-2 m-auto"
+      data-bs-dismiss="toast"
+      aria-label="Close"
+    ></button>
+  </div>
+</div>
+{% endif %}
+
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    flatpickr("#inputBirthday", {
+      dateFormat: "Y-m-d",
+      maxDate: "today",
+      allowInput: true,
+    });
+
+    {% if messages %}
+      const toast = new bootstrap.Toast(document.getElementById("successToast"));
+      toast.show();
+      setTimeout(function() {
+        const toastElement = document.getElementById("successToast");
+        const toastInstance = bootstrap.Toast.getInstance(toastElement);
+        toastInstance.hide();
+      }, 3000);
+    {% endif %}
+  });
+
+  // Preview the selected image
+  function previewImage(event) {
+    const reader = new FileReader();
+    reader.onload = function() {
+      const output = document.getElementById('profilePicturePreview');
+      output.src = reader.result;
+    };
+    reader.readAsDataURL(event.target.files[0]);
+  }
+</script>
+
+{% endblock content %}

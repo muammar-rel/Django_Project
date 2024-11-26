@@ -1,0 +1,60 @@
+{% extends "core/main.html" %} {% load static %} {% block content %}
+<div class="row">
+  {% for product in products %}
+  <div class="col-lg-4">
+    <img class="thumbnail" src="{{product.imageURL}}" />
+    <div class="box-element product">
+      <h6><strong>{{product.name}}</strong></h6>
+      <hr />
+
+      <button
+        data-product="{{product.id}}"
+        data-action="add"
+        class="btn btn-outline-secondary add-btn update-cart"
+      >
+        Add to Cart
+      </button>
+      <a class="btn btn-outline-success" href="{% url 'view' %}">View</a>
+      <h4 style="display: inline-block; float: right">
+        <strong>${{product.price|floatformat:2}}</strong>
+      </h4>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+<!-- Menampilkan pesan setelah registrasi -->
+{% for message in messages %}
+<div
+  class="message-popup"
+  style="
+    display: none;
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 15px;
+    background-color: #28a745;
+    color: white;
+    border-radius: 5px;
+    z-index: 1000;
+  "
+>
+  <p>{{ message }}</p>
+</div>
+{% endfor %}
+
+<script type="text/javascript">
+  // Menampilkan pesan setelah registrasi
+  {% if messages %}
+    var popup = document.querySelector('.message-popup');
+    if (popup) {
+      popup.style.display = 'block';  // Menampilkan popup
+      setTimeout(function() {
+        popup.style.display = 'none';  // Sembunyikan setelah beberapa detik
+      }, 5000); // Popup hilang setelah 5 detik
+    }
+  {% endif %}
+</script>
+
+{% endblock content %}
