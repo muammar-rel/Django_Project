@@ -24,7 +24,7 @@ Nama Anggota kelompok 4
    ![Img](static/images/doc/6.jpg)
 1. register
    ![Img](static/images/doc/7.jpg)
-1. halaman tempat produk dan halaman menambahkan produk
+1. halaman menambahkan produk dan tempat produk
    ![Img](static/images/doc/8.jpg)
    ![Img](static/images/doc/8.8.jpg)
 
